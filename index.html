@@ -268,140 +268,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   var limiteTentativas = 50;
 
   function iniciarBarraFixa() {
-    var barra = document.getElementById(
-      'barra-fixa'
-    );
+    var barra = document.getElementById('barra-fixa');
 
-    var gatilho = document.getElementById(
-      'aparecer-barra'
-    );
-
-    /*
-     * Aguarda o Elementor terminar
-     * de renderizar os containers.
-     */
-    if (!barra || !gatilho) {
+    if (!barra) {
       tentativas++;
-
       if (tentativas < limiteTentativas) {
-        window.setTimeout(
-          iniciarBarraFixa,
-          250
-        );
+        window.setTimeout(iniciarBarraFixa, 250);
       } else {
-        if (!barra) {
-          console.error(
-            'O container com ID "barra-fixa" não foi encontrado.'
-          );
-        }
-
-        if (!gatilho) {
-          console.error(
-            'A seção com ID "aparecer-barra" não foi encontrada.'
-          );
-        }
+        console.error('O container com ID "barra-fixa" não foi encontrado.');
       }
-
       return;
     }
 
     var barraJaAtivada = false;
-    var observador = null;
 
     function ativarBarra() {
       if (barraJaAtivada) {
         return;
       }
-
       barraJaAtivada = true;
-
-      barra.classList.add(
-        'barra-ativa'
-      );
-
-      window.removeEventListener(
-        'scroll',
-        verificarPosicao
-      );
-
-      window.removeEventListener(
-        'resize',
-        verificarPosicao
-      );
-
-      if (observador) {
-        observador.disconnect();
-      }
+      barra.classList.add('barra-ativa');
     }
 
-    function verificarPosicao() {
-      if (barraJaAtivada) {
-        return;
-      }
-
-      var posicao =
-        gatilho.getBoundingClientRect();
-
-      /*
-       * Ativa quando o começo da seção
-       * entra na área visível da tela.
-       *
-       * Também ativa caso a página seja
-       * carregada já depois dessa seção.
-       */
-      if (
-        posicao.top <= window.innerHeight
-      ) {
-        ativarBarra();
-      }
-    }
-
-    if (
-      'IntersectionObserver' in window
-    ) {
-      observador =
-        new IntersectionObserver(
-          function (entradas) {
-            for (
-              var i = 0;
-              i < entradas.length;
-              i++
-            ) {
-              if (
-                entradas[i].isIntersecting
-              ) {
-                ativarBarra();
-                break;
-              }
-            }
-          },
-          {
-            threshold: 0.01
-          }
-        );
-
-      observador.observe(gatilho);
-    }
-
-    window.addEventListener(
-      'scroll',
-      verificarPosicao,
-      {
-        passive: true
-      }
-    );
-
-    window.addEventListener(
-      'resize',
-      verificarPosicao
-    );
-
-    window.addEventListener(
-      'load',
-      verificarPosicao
-    );
-
-    verificarPosicao();
+    // Aparecer depois de 60 segundos
+    window.setTimeout(ativarBarra, 60000);
   }
 
   if (
@@ -2338,7 +2228,7 @@ TODOS OS DIREITOS RESERVADOS</h2>				</div>
 				<div class="elementor-element elementor-element-ac15a9a elementor-align-justify elementor-widget__width-initial botao-pulsando elementor-widget-mobile__width-initial elementor-widget elementor-widget-button" data-id="ac15a9a" data-element_type="widget" data-e-type="widget" data-widget_type="button.default">
 				<div class="elementor-widget-container">
 									<div class="elementor-button-wrapper">
-					<a class="elementor-button elementor-button-link elementor-size-sm elementor-animation-shrink" href="https://checkout.perfectpay.com.br/pay/PPU38CQFDB0?">
+					<a class="elementor-button elementor-button-link elementor-size-sm elementor-animation-shrink" href="#oferta">
 						<span class="elementor-button-content-wrapper">
 									<span class="elementor-button-text">COMEÇAR</span>
 					</span>
