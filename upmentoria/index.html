@@ -525,24 +525,63 @@ body.custom-background { background-color: #0a0a0a; }
 <script>
   var delaySeconds = 40;
   var player = document.querySelector("vturb-smartplayer");
+
+  // Function to reveal all hidden elements and scroll to price
+  var revealDone = false;
+  function revelarPreco(withScroll) {
+    if (revealDone) return;
+    revealDone = true;
+    document.querySelectorAll('.esconder').forEach(function(el) {
+      el.style.display = '';
+      el.classList.remove('esconder');
+    });
+    if (withScroll !== false) {
+      setTimeout(function() {
+        var priceContainer = document.querySelector('[data-id="5b983fa"]');
+        if (priceContainer) {
+          priceContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 400);
+    }
+  }
+
+  // Reveal immediately if user scrolls near the price section
+  var priceAnchor = document.querySelector('[data-id="e9707ff"]');
+  if (priceAnchor && 'IntersectionObserver' in window) {
+    var scrollObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          scrollObserver.disconnect();
+          revelarPreco(false); // don't scroll since user is already there
+        }
+      });
+    }, { rootMargin: '200px 0px 0px 0px' }); // fire a bit before it enters view
+    scrollObserver.observe(priceAnchor);
+  }
+
+  // Fallback: reveal via vturb timer after delaySeconds
   player.addEventListener("player:ready", function() {
     player.displayHiddenElements(delaySeconds, [".esconder"], {
       persist: true
     });
 
-    // Scroll to price section when it reveals
-    var scrollDone = false;
-    var observer = new MutationObserver(function() {
+    // Also scroll to price when vturb reveals it (if user hasn't already scrolled there)
+    var mutationDone = false;
+    var mutationObserver = new MutationObserver(function() {
+      if (mutationDone) return;
       var priceContainer = document.querySelector('[data-id="5b983fa"]');
-      if (!scrollDone && priceContainer && priceContainer.offsetParent !== null) {
-        scrollDone = true;
-        observer.disconnect();
-        setTimeout(function() {
-          priceContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 400);
+      if (priceContainer && priceContainer.offsetParent !== null) {
+        mutationDone = true;
+        mutationObserver.disconnect();
+        if (!revealDone) {
+          revealDone = true;
+          setTimeout(function() {
+            priceContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 400);
+        }
       }
     });
-    observer.observe(document.body, { attributes: true, subtree: true, attributeFilter: ['style', 'class'] });
+    mutationObserver.observe(document.body, { attributes: true, subtree: true, attributeFilter: ['style', 'class'] });
   });
 </script> </div>
 </div>
