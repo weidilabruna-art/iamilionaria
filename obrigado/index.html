@@ -451,7 +451,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 				</div>
 				<div class="elementor-element elementor-element-2114f92 elementor-widget elementor-widget-heading" data-id="2114f92" data-element_type="widget" data-e-type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default">COMPRA APROVADA ÀS 21:28</h2>				</div>
+					<h2 class="elementor-heading-title elementor-size-default">COMPRA APROVADA ÀS <span id="dynamic-time">21:28</span></h2>
+					<script>
+					document.addEventListener('DOMContentLoaded', function() {
+						var now = new Date();
+						var hours = String(now.getHours()).padStart(2, '0');
+						var minutes = String(now.getMinutes()).padStart(2, '0');
+						var timeElement = document.getElementById('dynamic-time');
+						if (timeElement) {
+							timeElement.textContent = hours + ':' + minutes;
+						}
+					});
+					</script>				</div>
 				</div>
 					</div>
 				</div>
