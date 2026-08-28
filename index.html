@@ -2339,9 +2339,9 @@ var e="script#wp-emoji-settings",t=document.querySelector(e);if(!(t instanceof H
 window.addEventListener('load', function () {
   console.log("Iniciando script de correção do carrossel...");
 
-  // Adiciona CSS básico caso o swiper.min.css não aplique o flexbox
+  // Força o estilo do carrossel para não quebrar o layout
   var style = document.createElement('style');
-  style.innerHTML = '.elementor-main-swiper .swiper-wrapper, .elementor-image-carousel .swiper-wrapper { display: flex !important; flex-direction: row; } .swiper-slide { flex-shrink: 0; }';
+  style.innerHTML = '.elementor-main-swiper .swiper-wrapper, .elementor-image-carousel .swiper-wrapper { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; } .swiper-slide { flex-shrink: 0 !important; }';
   document.head.appendChild(style);
 
   function waitForSwiper(callback, retries) {
@@ -2357,9 +2357,12 @@ window.addEventListener('load', function () {
   }
 
   waitForSwiper(function () {
-    var mediaCarousels = document.querySelectorAll('.elementor-widget-media-carousel .elementor-main-swiper:not(.swiper-initialized)');
+    // 1. Media Carousels
+    var mediaCarousels = document.querySelectorAll('.elementor-widget-media-carousel .elementor-main-swiper');
     console.log("Media carousels encontrados:", mediaCarousels.length);
     mediaCarousels.forEach(function (el) {
+      if (el.swiper) return; // Já foi inicializado corretamente
+
       var widget = el.closest('[data-settings]');
       var settings = {};
       try { settings = JSON.parse(widget.getAttribute('data-settings')); } catch (e) {}
@@ -2387,12 +2390,15 @@ window.addEventListener('load', function () {
           1025: { slidesPerView: slidesPerView }
         }
       });
-      console.log("Media carousel inicializado.");
+      console.log("Media carousel inicializado com sucesso.");
     });
 
-    var imageCarousels = document.querySelectorAll('.elementor-widget-image-carousel .elementor-image-carousel-wrapper:not(.swiper-initialized)');
+    // 2. Image Carousels
+    var imageCarousels = document.querySelectorAll('.elementor-widget-image-carousel .elementor-image-carousel-wrapper');
     console.log("Image carousels encontrados:", imageCarousels.length);
     imageCarousels.forEach(function (el) {
+      if (el.swiper) return; // Já foi inicializado corretamente
+
       var widget = el.closest('[data-settings]');
       var settings = {};
       try { settings = JSON.parse(widget.getAttribute('data-settings')); } catch (e) {}
@@ -2419,7 +2425,7 @@ window.addEventListener('load', function () {
           1025: { slidesPerView: slidesPerView }
         }
       });
-      console.log("Image carousel inicializado.");
+      console.log("Image carousel inicializado com sucesso.");
     });
   });
 });
