@@ -2336,7 +2336,7 @@ var e="script#wp-emoji-settings",t=document.querySelector(e);if(!(t instanceof H
 
 <script>
 // Fix: Inicialização manual do Swiper para carrosséis do Elementor
-window.addEventListener('load', function () {
+(function () {
   console.log("Iniciando script de correção do carrossel...");
 
   // Força o estilo do carrossel para não quebrar o layout
@@ -2428,6 +2428,6 @@ window.addEventListener('load', function () {
       console.log("Image carousel inicializado com sucesso.");
     });
   });
-});
+})();
 </script>
 </body></html>
